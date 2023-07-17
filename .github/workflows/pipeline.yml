@@ -8,6 +8,7 @@ env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
   AWS_REGION: ${{ secrets.AWS_REGION }}
+  WORKING_DIR: /home/runner/work/vpc-endpoint/vpc-endpoint
 
 jobs:
   terraform_init:
@@ -49,7 +50,7 @@ jobs:
         uses: actions/download-artifact@v3
 
       - name: Terraform plan
-        working-directory: /home/runner/work/vpc-endpoint/vpc-endpoint
+        working-directory: ${{ secrets.WORKING_DIR }}
         run: |
           chmod +x .terraform/providers/registry.terraform.io/hashicorp/aws/5.7.0/linux_amd64/terraform-provider-aws_v5.7.0_x5
           terraform plan -var-file="values.tfvars"
@@ -85,7 +86,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: module
-          path: /home/runner/work/vpc-endpoint/vpc-endpoint/*
+          path: ${{ secrets.WORKING_DIR }}/*
           retention-days: 1
 
   terraform_apply:
@@ -103,7 +104,7 @@ jobs:
         uses: actions/download-artifact@v3
 
       - name: Terraform apply
-        working-directory: /home/runner/work/vpc-endpoint/vpc-endpoint
+        working-directory: ${{ secrets.WORKING_DIR }}
         run: |
           chmod +x .terraform/providers/registry.terraform.io/hashicorp/aws/5.7.0/linux_amd64/terraform-provider-aws_v5.7.0_x5
           terraform apply --auto-approve -var-file="values.tfvars"
@@ -112,7 +113,7 @@ jobs:
         uses: actions/upload-artifact@v3
         with:
           name: module
-          path: /home/runner/work/vpc-endpoint/vpc-endpoint/*
+          path: ${{ secrets.WORKING_DIR }}/*
           retention-days: 1
 
   terraform_destroy:
@@ -130,7 +131,7 @@ jobs:
         uses: actions/download-artifact@v3
 
       - name: Terraform apply
-        working-directory: /home/runner/work/vpc-endpoint/vpc-endpoint
+        working-directory: ${{ secrets.WORKING_DIR }}
         run: |
           chmod +x .terraform/providers/registry.terraform.io/hashicorp/aws/5.7.0/linux_amd64/terraform-provider-aws_v5.7.0_x5
           terraform destroy --auto-approve -var-file="values.tfvars"
