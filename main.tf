@@ -7,6 +7,6 @@ resource "aws_vpc_endpoint" "this" {
   security_group_ids = var.security_group_ids
   subnet_ids         = var.subnet_ids
   auto_accept        = true
-  ip_address_type    = "ipV4"
+  ip_address_type    = "ipv4"
 
 }
